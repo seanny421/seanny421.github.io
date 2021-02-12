@@ -10,8 +10,6 @@ let today;
 document.addEventListener('DOMContentLoaded', () => {
     today = getToday();
     getTodos();
-    displayMap();
-    
 });
 //document.addEventListener('DOMContentLoaded', getTodos, getToday);
 todoButton.addEventListener('click', addTodo);
