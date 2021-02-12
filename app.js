@@ -136,18 +136,25 @@ function getToday(){
     switch(day){
         case 0:
             header.innerText = "Sunday"
+            break;
         case 1:
             header.innerText = "Monday"
+            break;
         case 2:
             header.innerText = "Tuesday"
+            break;
         case 3:
             header.innerText = "Wednesday"
+            break;
         case 4:
             header.innerText = "Thursday"
+            break;
         case 5:
             header.innerText = "Friday"
+            break;
         case 6:
             header.innerText = "Saturday"
+            break;
     }
     headerDiv.appendChild(header);
     return day;
