@@ -156,36 +156,3 @@ function getToday(){
     headerDiv.appendChild(header);
     return day;
 }
-
- function displayMap(){
-    let map = new Map()
-    map.set(today, ["washing"]);
-    addToMap(map, "homework");
-    map.set(2, "dishes");
-    let x = map.get(today);
-    console.log(x[1]);
-
-    removeFromMap(map, "washing");
-    x = map.get(today);
-    console.log(x[0]);
- }
-
- function addToMap(map, item){
-     var mapp = map.get(today);
-     var arr = []
-     mapp.forEach(i => arr.push(i));
-     arr.push(item);
-     map.set(today, arr);
- }
-
- function removeFromMap(map, item){
-     var mapp = map.get(today);
-     var arr = []
-     mapp.forEach(i => arr.push(i));
-     mapp.forEach(function(i){
-        if(item === i){
-            arr.splice(arr.indexOf(i), 1);
-        }
-     });
-     map.set(today, arr);
- }
