@@ -150,6 +150,8 @@ function getToday(){
             header.innerText = "Thursday"
         case 5:
             header.innerText = "Friday"
+        case 6:
+            header.innerText = "Saturday"
     }
     headerDiv.appendChild(header);
     return day;
