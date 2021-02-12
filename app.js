@@ -94,8 +94,6 @@ function getTodos(){
         const todoDiv = document.createElement('div');
         todoDiv.classList.add("todo");
         //create li
-        console.log(todo);
-        
         const newTodo = document.createElement('li');
         newTodo.innerText = todo;
         newTodo.classList.add('todo-item');
