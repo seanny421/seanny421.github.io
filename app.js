@@ -4,8 +4,8 @@ const todoButton = document.querySelector('.todo-button');
 const todoList = document.querySelector('.todo-list');
 const headerDiv = document.querySelector('.day-of-week');
 const pomodoroButton = document.querySelector('.pomodoro-btn');
-
 let today;
+
 
 //event listeners
 //on startup
@@ -32,12 +32,18 @@ function addTodo(event){
     newTodo.classList.add('todo-item');
     todoDiv.appendChild(newTodo);
     //add todo to local storage
-    saveLocalTodos(todoInput.value);
+    saveLocalTodos(todoInput.value, today);
     //check button
     const completedButton = document.createElement('button');
     completedButton.innerHTML = '<i class="fas fa-check"></i>';
     completedButton.classList.add("complete-btn");
     todoDiv.appendChild(completedButton);
+
+    //move todo one day forward button
+    const moveDayButton = document.createElement('button');
+    moveDayButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
+    moveDayButton.classList.add("move-day-btn");
+    todoDiv.appendChild(moveDayButton);
 
     //delete button
     const deleteButton = document.createElement('button');
@@ -68,10 +74,21 @@ function deleteCheck(e){
         const todo = item.parentElement;
         todo.classList.toggle("completed");
     }
+
+    //move todo day forward
+    if(item.classList[0] === 'move-day-btn'){
+        const todo = item.parentElement;
+        saveLocalTodos(todo, today+1);
+        todo.classList.add("slide-right");
+        removeLocalTodos(todo);
+        todo.addEventListener('transitionend', function(){
+            todo.remove();
+        });
+    }
 }
 
 
-function saveLocalTodos(todo){
+function saveLocalTodos(todo, today){
     //check  -- do i already have things in there?
     let todos;
     if(localStorage.getItem(today) === null){
@@ -107,6 +124,12 @@ function getTodos(){
         completedButton.innerHTML = '<i class="fas fa-check"></i>';
         completedButton.classList.add("complete-btn");
         todoDiv.appendChild(completedButton);
+
+        //move todo one day forward button
+        const moveDayButton = document.createElement('button');
+        moveDayButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
+        moveDayButton.classList.add("move-day-btn");
+        todoDiv.appendChild(moveDayButton);
 
         //delete button
         const deleteButton = document.createElement('button');
@@ -171,8 +194,8 @@ function togglePom(){
         timer.innerHTML = `
             <div class="base-timer hidden">
                 <ul>
-                    <li><span id="minutes"></span>Minutes</li>
-                    <li><span id="seconds"></span>Seconds</li>
+                    <li><span id="minutes">25</span>Minutes</li>
+                    <li><span id="seconds">00</span>Seconds</li>
                 </ul>
             </div>
             <button class="start-button sup" type="submit">Start</button>
@@ -201,8 +224,6 @@ function togglePom(){
 
         let now = new Date().getTime();
         let target = new Date(now + 25*60000);
-
-
         x = setInterval(function() {
             //check to see if pomodoro is still up, otherwise we will constantly be running
             //this loop in the background
@@ -223,4 +244,47 @@ function togglePom(){
             }
         });
     }
+}
+
+
+const startButton = document.querySelector('.start-button');
+const stopButton = document.querySelector('.stop-button');
+startButton.addEventListener('click', countDown);
+stopButton.addEventListener('click', stopCounting);
+
+function stopCounting(){
+    clearInterval(x);
+}
+
+function countDown(e){
+    
+    e.preventDefault();
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+
+    let now = new Date().getTime();
+    let target = new Date(now + 25*60000);
+
+
+    x = setInterval(function() {
+        //check to see if pomodoro is still up, otherwise we will constantly be running
+        //this loop in the background
+        if(!document.querySelector('.base-timer')){
+            clearInterval(x);
+        }
+        let now = new Date().getTime();
+        let distance = target - now;
+
+        document.getElementById("minutes").innerText = Math.floor((distance % (hour))/ (minute));
+        document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / (second));
+
+        if(distance < 0){
+            console.log("DONE");
+            clearInterval(x);
+            var audio = new Audio('bell_sound.mp3');
+            audio.play();
+        }
+    });
 }
