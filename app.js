@@ -78,7 +78,8 @@ function deleteCheck(e){
     //move todo day forward
     if(item.classList[0] === 'move-day-btn'){
         const todo = item.parentElement;
-        saveLocalTodos(todo, today+1);
+        //console.log(todo.innerText);
+        saveLocalTodos(todo.innerText, today+1);
         todo.classList.add("slide-right");
         removeLocalTodos(todo);
         todo.addEventListener('transitionend', function(){
