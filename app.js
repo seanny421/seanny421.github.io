@@ -6,7 +6,6 @@ const headerDiv = document.querySelector('.day-of-week');
 const pomodoroButton = document.querySelector('.pomodoro-btn');
 let today;
 
-
 //event listeners
 //on startup
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //document.addEventListener('DOMContentLoaded', getTodos, getToday);
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
-pomodoroButton.addEventListener('click', togglePom);
 
 //functions
 function addTodo(event){
@@ -184,70 +182,13 @@ function getToday(){
             header.innerText = "Saturday"
             break;
     }
-    headerDiv.appendChild(header);
+    if(headerDiv){
+        headerDiv.appendChild(header);
+    }
     return day;
 }
 
-function togglePom(){
-    const timer = document.querySelector('.timer');
-    
-    if(document.querySelector('.base-timer') == null){
-        timer.innerHTML = `
-            <div class="base-timer hidden">
-                <ul>
-                    <li><span id="minutes">25</span>Minutes</li>
-                    <li><span id="seconds">00</span>Seconds</li>
-                </ul>
-            </div>
-            <button class="start-button sup" type="submit">Start</button>
-            <button class="stop-button" type="submit">Stop</button>`;
-    }
-    else{
-        timer.innerHTML = "";
-    }
-    //timer element for pomodoro
-    const startButton = document.querySelector('.start-button');
-    const stopButton = document.querySelector('.stop-button');
-    startButton.addEventListener('click', countDown);
-    stopButton.addEventListener('click', stopCounting);
-
-    function stopCounting(){
-        clearInterval(x);
-    }
-
-    function countDown(e){
-        
-        e.preventDefault();
-        const second = 1000;
-        const minute = second * 60;
-        const hour = minute * 60;
-        const day = hour * 24;
-
-        let now = new Date().getTime();
-        let target = new Date(now + 25*60000);
-        x = setInterval(function() {
-            //check to see if pomodoro is still up, otherwise we will constantly be running
-            //this loop in the background
-            if(!document.querySelector('.base-timer')){
-                clearInterval(x);
-            }
-            let now = new Date().getTime();
-            let distance = target - now;
-
-            document.getElementById("minutes").innerText = Math.floor((distance % (hour))/ (minute));
-            document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / (second));
-
-            if(distance < 0){
-                console.log("DONE");
-                clearInterval(x);
-                var audio = new Audio('bell_sound.mp3');
-                audio.play();
-            }
-        });
-    }
-}
-
-
+//for pomodoro timer
 const startButton = document.querySelector('.start-button');
 const stopButton = document.querySelector('.stop-button');
 startButton.addEventListener('click', countDown);
@@ -258,7 +199,6 @@ function stopCounting(){
 }
 
 function countDown(e){
-    
     e.preventDefault();
     const second = 1000;
     const minute = second * 60;
@@ -277,12 +217,11 @@ function countDown(e){
         }
         let now = new Date().getTime();
         let distance = target - now;
-
+        
         document.getElementById("minutes").innerText = Math.floor((distance % (hour))/ (minute));
         document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / (second));
 
         if(distance < 0){
-            console.log("DONE");
             clearInterval(x);
             var audio = new Audio('bell_sound.mp3');
             audio.play();
